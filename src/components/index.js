@@ -1,9 +1,10 @@
 import "../pages/index.css";
 import initialCards from "./cards";
 import { openModal, closeModal } from "./modal";
+import { likeCard, deleteCard, createCard } from "./card";
 
 const container = document.querySelector(".content");
-const cardTemplate = document.querySelector("#card-template").content;
+export const cardTemplate = document.querySelector("#card-template").content;
 const cardsContent = container.querySelector(".places__list");
 
 const popups = document.querySelectorAll(".popup");
@@ -18,15 +19,12 @@ const popupImage = imagePopup.querySelector(".popup__image");
 const popupCaption = imagePopup.querySelector(".popup__caption");
 
 const editProfileForm = document.forms["edit-profile"];
-let profileTitle = document.querySelector(".profile__title");
+const profileTitle = document.querySelector(".profile__title");
 let profileDescription = document.querySelector(".profile__description");
 
 const addCardForm = document.forms["new-place"];
-let placeName = addCardForm.elements["place-name"];
-let placeLink = addCardForm.elements["link"];
-
-editProfileForm.elements.name.value = profileTitle.textContent;
-editProfileForm.elements.description.value = profileDescription.textContent;
+export let placeName = addCardForm.elements["place-name"];
+export let placeLink = addCardForm.elements["link"];
 
 popups.forEach((popup) => {
   popup.classList.add("popup_is-animated");
@@ -41,6 +39,8 @@ popups.forEach((popup) => {
 });
 
 editBtn.addEventListener("click", () => {
+  editProfileForm.elements.name.value = profileTitle.textContent;
+  editProfileForm.elements.description.value = profileDescription.textContent;
   openModal(editPopup);
 });
 
@@ -55,64 +55,15 @@ editProfileForm.addEventListener("submit", handleEditFormSubmit);
 addNewCardBtn.addEventListener("click", () => {
   openModal(addNewCardPopup);
 });
+
 function handleAddCardFormSubmit(evt) {
   evt.preventDefault();
-  const newCard = (deleteFunc) => {
-    const newCardElement = createNewCard(deleteFunc);
-    cardsContent.prepend(newCardElement);
-  };
-  newCard();
+  const newCardElement = createCard(evt, deleteCard, likeCard, openPopupCard);
+  cardsContent.prepend(newCardElement);
   closeModal(addNewCardPopup);
-  placeLink.value = "";
-  placeName.value = "";
+  evt.target.reset();
 }
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
-
-closeBtn.forEach((btn) => {
-  btn.addEventListener("click", function () {
-    const popupOpened = document.querySelector(".popup_is-opened");
-    closeModal(popupOpened);
-  });
-});
-
-const createCard = (item, deleteFunc) => {
-  const cardElement = cardTemplate.cloneNode(true);
-  cardElement.querySelector(".card__image").src = item.link;
-  cardElement.querySelector(".card__image").alt = item.name;
-  cardElement.querySelector(".card__title").textContent = item.name;
-
-  cardElement
-    .querySelector(".card__delete-button")
-    .addEventListener("click", deleteFunc);
-
-  cardElement
-    .querySelector(".card__like-button")
-    .addEventListener("click", likeCard);
-
-  cardElement
-    .querySelector(".card__image")
-    .addEventListener("click", openPopupCard);
-
-  return cardElement;
-};
-
-const createNewCard = () => {
-  const newCardElement = cardTemplate.cloneNode(true);
-  newCardElement.querySelector(".card__image").src = placeLink.value;
-  newCardElement.querySelector(".card__image").alt = placeName.value;
-  newCardElement.querySelector(".card__title").textContent = placeName.value;
-  newCardElement
-    .querySelector(".card__delete-button")
-    .addEventListener("click", deleteCard);
-  newCardElement
-    .querySelector(".card__like-button")
-    .addEventListener("click", likeCard);
-  newCardElement
-    .querySelector(".card__image")
-    .addEventListener("click", openPopupCard);
-
-  return newCardElement;
-};
 
 function openPopupCard(item) {
   popupImage.src = item.srcElement.currentSrc;
@@ -121,19 +72,13 @@ function openPopupCard(item) {
   openModal(imagePopup);
 }
 
-function likeCard(evt) {
-  evt.target.classList.toggle("card__like-button_is-active");
-}
-
-function deleteCard(evt) {
-  evt.target.closest(".places__item").remove();
-}
-
-const addCard = (item, deleteFunc) => {
-  const cardElement = createCard(item, deleteFunc);
+const addCard = (item, deleteFunc, likeFunc, handleImageClick) => {
+  const cardElement = createCard(item, deleteFunc, likeFunc, handleImageClick);
   cardsContent.append(cardElement);
 };
 
 initialCards.forEach((item) =>
   addCard(item, deleteCard, likeCard, openPopupCard)
 );
+
+export { openPopupCard };
