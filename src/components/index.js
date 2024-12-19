@@ -23,8 +23,8 @@ const profileTitle = document.querySelector(".profile__title");
 let profileDescription = document.querySelector(".profile__description");
 
 const addCardForm = document.forms["new-place"];
-export let placeName = addCardForm.elements["place-name"];
-export let placeLink = addCardForm.elements["link"];
+const placeName = addCardForm.elements["place-name"];
+const placeLink = addCardForm.elements["link"];
 
 popups.forEach((popup) => {
   popup.classList.add("popup_is-animated");
@@ -56,12 +56,19 @@ addNewCardBtn.addEventListener("click", () => {
   openModal(addNewCardPopup);
 });
 
-function handleAddCardFormSubmit(evt) {
-  evt.preventDefault();
-  const newCardElement = createCard(evt, deleteCard, likeCard, openPopupCard);
+function handleAddCardFormSubmit(item) {
+  item.preventDefault();
+  const newCardElement = createCard(
+    item,
+    deleteCard,
+    likeCard,
+    openPopupCard,
+    placeLink,
+    placeName
+  );
   cardsContent.prepend(newCardElement);
   closeModal(addNewCardPopup);
-  evt.target.reset();
+  item.target.reset();
 }
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
 
@@ -72,13 +79,9 @@ function openPopupCard(item) {
   openModal(imagePopup);
 }
 
-const addCard = (item, deleteFunc, likeFunc, handleImageClick) => {
-  const cardElement = createCard(item, deleteFunc, likeFunc, handleImageClick);
+const addCard = (item) => {
+  const cardElement = createCard(item, deleteCard, likeCard, openPopupCard);
   cardsContent.append(cardElement);
 };
 
-initialCards.forEach((item) =>
-  addCard(item, deleteCard, likeCard, openPopupCard)
-);
-
-export { openPopupCard };
+initialCards.forEach(addCard);

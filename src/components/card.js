@@ -1,7 +1,12 @@
-import { cardTemplate } from "./index";
-import { placeLink, placeName } from "./index";
-
-const createCard = (item, deleteFunc, likeFunc, handleImageClick) => {
+const createCard = (
+  item,
+  deleteFunc,
+  likeFunc,
+  handleImageClick,
+  placeLink,
+  placeName
+) => {
+  const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
   const cardTitle = cardElement.querySelector(".card__title");
