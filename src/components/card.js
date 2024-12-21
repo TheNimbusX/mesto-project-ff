@@ -1,11 +1,4 @@
-const createCard = (
-  item,
-  deleteFunc,
-  likeFunc,
-  handleImageClick,
-  placeLink,
-  placeName
-) => {
+const createCard = (item, deleteFunc, likeFunc, handleImageClick) => {
   const cardTemplate = document.querySelector("#card-template").content;
   const cardElement = cardTemplate.cloneNode(true);
   const cardImage = cardElement.querySelector(".card__image");
@@ -14,17 +7,8 @@ const createCard = (
   const cardDelete = cardElement.querySelector(".card__delete-button");
 
   cardImage.src = item.link;
-  if (item.link == undefined) {
-    cardImage.src = placeLink.value;
-  }
   cardImage.alt = item.name;
-  if (item.name == undefined) {
-    cardImage.alt = placeName.value;
-  }
   cardTitle.textContent = item.name;
-  if (item.name == undefined) {
-    cardTitle.textContent = placeName.value;
-  }
 
   cardDelete.addEventListener("click", deleteFunc);
   cardLike.addEventListener("click", likeFunc);
