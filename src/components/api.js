@@ -1,3 +1,11 @@
+const config = {
+  baseUrl: "https://nomoreparties.co/v1/wff-cohort-22",
+  headers: {
+    authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
+    "Content-Type": "application/json",
+  },
+};
+
 function validateFetch(data) {
   if (data.ok) {
     return data.json();
@@ -6,30 +14,23 @@ function validateFetch(data) {
 }
 
 export const getCards = () => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-22/cards", {
+  return fetch(`${config.baseUrl}/cards`, {
     method: "GET",
-    headers: {
-      authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
-    },
+    headers: config.headers,
   }).then(validateFetch);
 };
 
 export const getUser = () => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-22/users/me", {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: "GET",
-    headers: {
-      authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
-    },
+    headers: config.headers,
   }).then(validateFetch);
 };
 
 export const editUser = (editProfileForm) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-22/users/me", {
+  return fetch(`${config.baseUrl}/users/me`, {
     method: "PATCH",
-    headers: {
-      authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
     body: JSON.stringify({
       name: editProfileForm.elements.name.value,
       about: editProfileForm.elements.description.value,
@@ -38,12 +39,9 @@ export const editUser = (editProfileForm) => {
 };
 
 export const postCard = (addCardForm) => {
-  return fetch("https://nomoreparties.co/v1/wff-cohort-22/cards", {
+  return fetch(`${config.baseUrl}/cards`, {
     method: "POST",
-    headers: {
-      authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
     body: JSON.stringify({
       name: addCardForm.elements["place-name"].value,
       link: addCardForm.elements["link"].value,
@@ -52,32 +50,23 @@ export const postCard = (addCardForm) => {
 };
 
 export const putLike = (id) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-22/cards/likes/${id}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: "PUT",
-    headers: {
-      authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
   }).then(validateFetch);
 };
 
 export const deleteLike = (id) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-22/cards/likes/${id}`, {
+  return fetch(`${config.baseUrl}/cards/likes/${id}`, {
     method: "DELETE",
-    headers: {
-      authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
   }).then(validateFetch);
 };
 
 export const deleteMyCard = (id) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-22/cards/${id}`, {
+  return fetch(`${config.baseUrl}/cards/${id}`, {
     method: "DELETE",
-    headers: {
-      authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
   }).then((data) => {
     if (!data.ok) {
       return Promise.reject(`Ошибка: ${data.status}`);
@@ -86,12 +75,9 @@ export const deleteMyCard = (id) => {
 };
 
 export const patchAvatar = (avatarForm) => {
-  return fetch(`https://nomoreparties.co/v1/wff-cohort-22/users/me/avatar`, {
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
     method: "PATCH",
-    headers: {
-      authorization: "67dedd4f-2aab-47ae-9594-fab41227b68c",
-      "Content-Type": "application/json",
-    },
+    headers: config.headers,
     body: JSON.stringify({
       avatar: avatarForm.elements.avatar.value,
     }),

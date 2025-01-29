@@ -58,21 +58,22 @@ editBtn.addEventListener("click", () => {
 
 function handleEditFormSubmit(evt) {
   evt.preventDefault();
-  profileTitle.textContent = editProfileForm.elements.name.value;
-  profileDescription.textContent = editProfileForm.elements.description.value;
-
   editUser(editProfileForm)
     .then(() => {
-      editProfileForm.querySelector(".button").textContent = "Сохранение ...";
-    })
-    .then(() => {
-      setTimeout(() => {
-        editProfileForm.querySelector(".button").textContent = "Сохранить";
-        closeModal(editPopup);
-      }, 800);
+      profileTitle.textContent = editProfileForm.elements.name.value;
+      profileDescription.textContent =
+        editProfileForm.elements.description.value;
+      closeModal(editPopup);
+
+      evt.submitter.textContent = "Сохранение ...";
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      setTimeout(() => {
+        evt.submitter.textContent = "Сохранить";
+      }, 800);
     });
 }
 editProfileForm.addEventListener("submit", handleEditFormSubmit);
@@ -87,17 +88,19 @@ function handleAddCardFormSubmit(evt) {
   postCard(addCardForm)
     .then((item) => {
       cardsContent.prepend(
-        createCard(item, deleteCard, likeCard, openPopupCard)
+        createCard(item, deleteCard, likeCard, openPopupCard, item.owner._id)
       );
-      addCardForm.querySelector(".button").textContent = "Сохранение ...";
-      setTimeout(() => {
-        closeModal(addNewCardPopup);
-        evt.target.reset();
-        addCardForm.querySelector(".button").textContent = "Сохранить";
-      }, 400);
+      closeModal(addNewCardPopup);
+      evt.target.reset();
+      evt.submitter.textContent = "Сохранение ...";
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      setTimeout(() => {
+        evt.submitter.textContent = "Сохранить";
+      }, 400);
     });
 }
 addCardForm.addEventListener("submit", handleAddCardFormSubmit);
@@ -143,15 +146,17 @@ function changeAvatarFromPopup(evt) {
   profileAvatar.style.backgroundImage = `url(${avatarForm.elements.avatar.value})`;
   patchAvatar(avatarForm)
     .then(() => {
-      avatarForm.querySelector(".button").textContent = "Сохранение ...";
-      setTimeout(() => {
-        closeModal(avatarPopup);
-        evt.target.reset();
-        avatarForm.querySelector(".button").textContent = "Сохранить";
-      }, 400);
+      evt.submitter.textContent = "Сохранение ...";
+      closeModal(avatarPopup);
+      evt.target.reset();
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      setTimeout(() => {
+        evt.submitter.textContent = "Сохранить";
+      }, 400);
     });
 }
 avatarForm.addEventListener("submit", changeAvatarFromPopup);
